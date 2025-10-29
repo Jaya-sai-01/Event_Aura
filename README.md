@@ -1,3 +1,6 @@
+# Event_Aura
+>>>>>>> 93b60eaa6d57aeddbbbf50653dbcbf1802284b28
+=======
 # EventAura - College Event Management System
 
 EventAura is a full-stack MERN web application that connects students and colleges through event-based communities. Each college has its own community managed by an admin, while students can join any community to explore, chat, register, and participate in events.
@@ -241,3 +244,6 @@ This project is licensed under the MIT License.
 ---
 
 **EventAura** - Connecting colleges, empowering students, creating experiences! 🎓✨
+=======
+# Event_Aura
+>>>>>>> 93b60eaa6d57aeddbbbf50653dbcbf1802284b28
