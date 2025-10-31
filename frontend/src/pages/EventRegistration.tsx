@@ -40,7 +40,8 @@ const EventRegistration: React.FC = () => {
     }
   };
 
-  const validateStep = (step: number) => {
+  // FIX: Removed unused 'step' parameter
+  const validateStep = () => {
     const stepErrors: any = {};
     const requiredFields = event.registrationFields?.filter((field: any) => field.isRequired) || [];
     
@@ -55,14 +56,16 @@ const EventRegistration: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (validateStep(currentStep)) {
+    // FIX: Removed argument from call
+    if (validateStep()) {
       setCurrentStep(currentStep + 1);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateStep(currentStep)) return;
+    // FIX: Removed argument from call
+    if (!validateStep()) return;
     
     setSubmitting(true);
 

@@ -277,7 +277,9 @@ const EventDetails: React.FC = () => {
                       {canRegister ? (
                         isCommunityMember ? (
                           <button 
-                            onClick={() => navigate(`/event/${eventId}/register`)}
+                            // ****** THIS IS THE FIX ******
+                            onClick={registerForEvent}
+                            // ****************************
                             className="btn-primary" 
                             style={{ width: '100%' }}
                           >

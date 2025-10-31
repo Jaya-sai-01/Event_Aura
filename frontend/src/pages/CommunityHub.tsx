@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getToken, getRole } from '../utils/auth';
+import { getToken } from '../utils/auth'; // <-- FIX: Removed unused 'getRole' import
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
@@ -11,6 +11,20 @@ interface Community {
   category: string;
   members: any[];
   events: any[];
+}
+
+// Interface for a single channel
+interface Channel {
+  id: string;
+  name: string;
+  type: string;
+  icon: string;
+  adminOnly?: boolean; // Optional property
+}
+
+// Interface for the categories object
+interface ChannelCategories {
+  [key: string]: Channel[];
 }
 
 const CommunityHub: React.FC = () => {
@@ -26,7 +40,7 @@ const CommunityHub: React.FC = () => {
   const [newAnnouncement, setNewAnnouncement] = useState({ title: '', content: '', pinned: false });
   const [newQuery, setNewQuery] = useState({ issueType: 'general', description: '' });
   const [newFeedback, setNewFeedback] = useState({ rating: '5', content: '' });
-  const role = getRole();
+  // const role = getRole(); // <-- FIX 1: Removed unused variable
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
@@ -192,7 +206,8 @@ const CommunityHub: React.FC = () => {
     }
   };
 
-  const isAdminOfCommunity = (community: Community) => {
+  // FIX 2: Removed unused 'community' parameter
+  const isAdminOfCommunity = () => {
     const userId = localStorage.getItem('userId');
     const adminId = communityData?.community?.adminId;
     const adminIdString = typeof adminId === 'object' ? adminId._id : adminId;
@@ -210,7 +225,8 @@ const CommunityHub: React.FC = () => {
            createdCommunities.some(c => c._id === community._id);
   };
 
-  const channelCategories = {
+  // FIX 3: Applied the ChannelCategories type
+  const channelCategories: ChannelCategories = {
     text: [
       { id: 'general', name: 'general', type: 'text', icon: '💬' },
       { id: 'introductions', name: 'introductions', type: 'text', icon: '👋' }
@@ -272,7 +288,8 @@ const CommunityHub: React.FC = () => {
             {userRole === 'admin' && (
               <div className="card" style={{ marginTop: '1rem' }}>
                 <h3>Manage Community</h3>
-                {isAdminOfCommunity(selectedCommunity!) ? (
+                {/* FIX 2: Updated call */}
+                {isAdminOfCommunity() ? (
                   <div style={{ marginTop: '1rem' }}>
                     <h4>Members ({communityData.community.members?.length || 0})</h4>
                     <div style={{ maxHeight: '300px', overflowY: 'auto', marginTop: '0.5rem' }}>
@@ -310,7 +327,8 @@ const CommunityHub: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        {member.userId?._id !== communityData?.community?.adminId && isAdminOfCommunity(selectedCommunity!) && (
+                        {/* FIX 2: Updated call */}
+                        {member.userId?._id !== communityData?.community?.adminId && isAdminOfCommunity() && (
                           <div style={{ display: 'flex', gap: '0.5rem' }}>
                             <select 
                               value={member.role || 'member'}
@@ -442,7 +460,8 @@ const CommunityHub: React.FC = () => {
                 </div>
               )) || <p style={{ textAlign: 'center', color: '#6b7280' }}>No announcements yet.</p>}
             </div>
-            {isAdminOfCommunity(selectedCommunity!) && (
+            {/* FIX 2: Updated call */}
+            {isAdminOfCommunity() && (
               <div>
                 <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <input
@@ -473,7 +492,8 @@ const CommunityHub: React.FC = () => {
                 </div>
               </div>
             )}
-            {!isAdminOfCommunity(selectedCommunity!) && (
+            {/* FIX 2: Updated call */}
+            {!isAdminOfCommunity() && (
               <div style={{ textAlign: 'center', padding: '1rem', color: 'rgba(255,255,255,0.6)' }}>
                 👁️ View-only channel
               </div>
@@ -490,7 +510,8 @@ const CommunityHub: React.FC = () => {
               <div style={{ fontSize: '0.7rem', color: 'yellow', marginBottom: '0.5rem' }}>
                 Role: {userRole} | UserId: {localStorage.getItem('userId')} | AdminId: {JSON.stringify(communityData?.community?.adminId)}
               </div>
-              {isAdminOfCommunity(selectedCommunity!) && (
+              {/* FIX 2: Updated call */}
+              {isAdminOfCommunity() && (
                 <button 
                   onClick={() => navigate(`/community/${selectedCommunity?._id}/create-event`)}
                   className="btn-primary"
@@ -538,7 +559,8 @@ const CommunityHub: React.FC = () => {
                     >
                       View Details
                     </button>
-                    {isAdminOfCommunity(selectedCommunity!) && (
+                    {/* FIX 2: Updated call */}
+                    {isAdminOfCommunity() && (
                       <button 
                         onClick={() => navigate(`/edit-event/${event._id}`)}
                         className="btn-secondary"
@@ -1013,7 +1035,8 @@ const CommunityHub: React.FC = () => {
                   {selectedCommunity.collegeName}
                 </p>
               </div>
-              {!isAdminOfCommunity(selectedCommunity!) && (
+              {/* FIX 2: Updated call */}
+              {!isAdminOfCommunity() && (
                 <button 
                   onClick={leaveCommunity}
                   className="btn-danger"
@@ -1044,8 +1067,10 @@ const CommunityHub: React.FC = () => {
                     {categoryName}
                   </h5>
                   {channels.map((channel) => {
-                    const canAccess = !channel.adminOnly || isAdminOfCommunity(selectedCommunity!);
-                    const canChat = canAccess && (isAdminOfCommunity(selectedCommunity!) || !channel.adminOnly);
+                    // FIX 3: All errors in this block are resolved by the Channel interface
+                    // FIX 2: Updated calls
+                    const canAccess = !channel.adminOnly || isAdminOfCommunity();
+                    const canChat = canAccess && (isAdminOfCommunity() || !channel.adminOnly);
                     
                     return (
                       <div
@@ -1150,7 +1175,8 @@ const CommunityHub: React.FC = () => {
                     ) : (
                       <>
                         <span>🎓 {member.role === 'moderator' ? 'Moderator' : 'Member'}</span>
-                        {isAdminOfCommunity(selectedCommunity!) && member.userId?._id !== communityData?.community?.adminId && (
+                        {/* FIX 2: Updated call */}
+                        {isAdminOfCommunity() && member.userId?._id !== communityData?.community?.adminId && (
                           <select 
                             value={member.role || 'member'}
                             onChange={(e) => updateMemberRole(member.userId._id, e.target.value)}

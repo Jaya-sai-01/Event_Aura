@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
+// FIX: Define an interface for the leaderboard objects
+interface LeaderboardEntry {
+  _id: string;
+  name: string;
+  totalScore: number;
+  eventCount: number;
+  badgeCount: number;
+}
+
 const Leaderboard: React.FC = () => {
-  const [leaderboard, setLeaderboard] = useState([]);
+  // FIX: Apply the interface to the useState hook
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
 
@@ -91,6 +101,7 @@ const Leaderboard: React.FC = () => {
             }}>
               🥈
             </div>
+            {/* All errors from here down are fixed by typing useState */}
             <h3>{leaderboard[1]?.name}</h3>
             <p>{leaderboard[1]?.totalScore} points</p>
           </div>
@@ -142,7 +153,8 @@ const Leaderboard: React.FC = () => {
       <div className="card">
         <h3>Complete Rankings</h3>
         <div style={{ marginTop: '1rem' }}>
-          {leaderboard.map((user: any, index: number) => (
+          {/* FIX: Type 'user' parameter */}
+          {leaderboard.map((user: LeaderboardEntry, index: number) => (
             <div key={user._id} style={{
               display: 'flex',
               alignItems: 'center',

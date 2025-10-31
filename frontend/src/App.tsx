@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
@@ -18,7 +17,6 @@ import EventRegistration from './pages/EventRegistration';
 import Events from './pages/Events';
 import Leaderboard from './pages/Leaderboard';
 import ProtectedRoute from './components/ProtectedRoute';
-import { getRole } from './utils/auth';
 
 function App() {
   return (
@@ -30,107 +28,115 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route 
-            path="/communities" 
+
+          {/* Protected Routes */}
+          <Route
+            path="/communities"
             element={
               <ProtectedRoute>
                 <CommunityHub />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route path="/events" element={<Events />} />
-          
-          <Route 
-            path="/event/:eventId" 
+
+          <Route
+            path="/event/:eventId"
             element={
               <ProtectedRoute>
                 <EventDetails />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/event/:eventId/register" 
+
+          <Route
+            path="/event/:eventId/register"
             element={
               <ProtectedRoute>
                 <EventRegistration />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/leaderboard" 
+
+          <Route
+            path="/leaderboard"
             element={
               <ProtectedRoute>
                 <Leaderboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route path="/leaderboard" element={<Landing />} />
-          
-          <Route 
-            path="/admin/dashboard" 
+
+          {/* FIX: Added the missing route for /events */}
+          <Route
+            path="/events"
+            element={
+              <ProtectedRoute>
+                <Events />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard"
             element={
               <ProtectedRoute requiredRole="admin">
                 <AdminDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/student/home" 
+
+          <Route
+            path="/student/home"
             element={
               <ProtectedRoute requiredRole="student">
                 <StudentHome />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/profile" 
+
+          <Route
+            path="/profile"
             element={
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
-            } 
+            }
           />
-          
 
-          
-          <Route 
-            path="/community/:communityId/create-event" 
+          <Route
+            path="/community/:communityId/create-event"
             element={
               <ProtectedRoute requiredRole="admin">
                 <CreateEvent />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/event/:eventId/edit" 
+
+          <Route
+            path="/event/:eventId/edit"
             element={
               <ProtectedRoute requiredRole="admin">
                 <EditEvent />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/create-community" 
+
+          <Route
+            path="/create-community"
             element={
               <ProtectedRoute requiredRole="admin">
                 <CreateCommunity />
               </ProtectedRoute>
-            } 
+            }
           />
-          
-          <Route 
-            path="/community/:communityId" 
+
+          <Route
+            path="/community/:communityId"
             element={
               <ProtectedRoute>
                 <CommunityPage />
               </ProtectedRoute>
-            } 
+            }
           />
         </Routes>
       </div>

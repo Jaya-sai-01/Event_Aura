@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getToken } from '../utils/auth';
+// import { getToken } from '../utils/auth'; // <-- FIX: Removed unused import
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
